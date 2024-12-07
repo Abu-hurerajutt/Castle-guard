@@ -142,7 +142,9 @@ const Game = () => {
         </div>
       )}
 
-      {gameOver && <div className="game-over">Game Over</div>}
+      {gameOver && <div className="game-over">Game Over
+        <button onClick={handleRestart}>Restart</button>
+        </div>}
 
       {!paused && !gameOver && (
         <>
