@@ -8,7 +8,12 @@ const Game = () => {
   const [gameOver, setGameOver] = useState(false);
   const [paused, setPaused] = useState(false); // Pause state
   const gameRef = useRef(null);
+ const [score,setScore] = useState(0)
 
+  const playAudio = () => {
+    const audioElement = document.getElementById("gunshot");
+    audioElement.play();
+  };
   // Spawn enemies with health
   useEffect(() => {
     if (paused || gameOver) return;
@@ -58,6 +63,7 @@ const Game = () => {
         setPlayerPosition((prev) => Math.min(prev + 5, 90));
       }
       if (e.key === " ") {
+        playAudio()
         setBalls((prevBalls) => [
           ...prevBalls,
           { x: playerPosition + 2.5, y: 10 },
@@ -88,7 +94,13 @@ const Game = () => {
               return true;
             })
           );
-          return updatedEnemy.health > 0 ? updatedEnemy : null;
+          if(updatedEnemy.health > 0){
+            return updatedEnemy;
+          } 
+          else{
+            setScore(a=> score+1)
+            return null
+          }
         })
         .filter(Boolean)
     );
@@ -126,6 +138,7 @@ const Game = () => {
   };
 
   return (
+    
     <div ref={gameRef} className="game">
       <button
         className="menu-button"
@@ -133,6 +146,10 @@ const Game = () => {
       >
         Menu
       </button>
+      <br />
+      <br />
+      <br />
+      <input type="number" value={score} readOnly/>
 
       {paused && !gameOver && (
         <div className="menu">
@@ -165,11 +182,15 @@ const Game = () => {
               className="enemy"
               style={{ left: `${enemy.x}%`, top: `${enemy.y}%` }}
             >
-              <div className="enemy-health">{enemy.health}</div>
-            </div>
+<progress
+      value={enemy.health}
+      max="100"
+      style={{ width: "50px", height: "10px" }}
+    ></progress>            </div>
           ))}
         </>
       )}
+      <audio id="gunshot" src="/SFX/submachine-gun-79846.mp3"></audio>
     </div>
   );
 };
