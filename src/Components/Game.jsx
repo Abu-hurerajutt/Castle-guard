@@ -9,11 +9,39 @@ const Game = () => {
   const [paused, setPaused] = useState(false); // Pause state
   const gameRef = useRef(null);
  const [score,setScore] = useState(0)
+  const [backgroundMusic,setbackgroundMusic] = useState()
 
-  const playAudio = () => {
-    const audioElement = document.getElementById("gunshot");
-    audioElement.play();
+  const playBgmusic = ()=>{
+    const bgElement = document.getElementById("bgmusic")
+    bgElement.play()
+    setbackgroundMusic("/SFX/background.mp3")
+  }
+  const playgmmusic=()=>{
+    const gmElement = document.getElementById("gmmusic")
+    gmElement.play()
+  }
+  const playshot = () => {
+    const shotElement = document.getElementById("gunshot");
+    shotElement.play();
   };
+  const playHit = () =>{
+    const hitElement = document.getElementById("spawnhit")
+    hitElement.play()
+  }
+  const stopbgmusic = ()=>{
+    setbackgroundMusic("")
+  }
+  useEffect(
+    ()=>{
+      if(paused||gameOver) return;
+      const bginterval = setInterval(() => {
+        playBgmusic()
+      },5 );
+      return () => {
+        clearInterval(bginterval)
+        stopbgmusic()}
+    },[paused,gameOver]
+  )
   // Spawn enemies with health
   useEffect(() => {
     if (paused || gameOver) return;
@@ -63,7 +91,7 @@ const Game = () => {
         setPlayerPosition((prev) => Math.min(prev + 5, 90));
       }
       if (e.key === " ") {
-        playAudio()
+        playshot()
         setBalls((prevBalls) => [
           ...prevBalls,
           { x: playerPosition + 2.5, y: 10 },
@@ -72,7 +100,8 @@ const Game = () => {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {window.removeEventListener("keydown", handleKeyDown)
+    };
   }, [playerPosition, paused, gameOver]);
 
   // Check for collisions between balls and enemies
@@ -88,7 +117,8 @@ const Game = () => {
                 Math.abs(enemy.x - ball.x) < 10 &&
                 Math.abs(enemy.y - ball.y) < 10
               ) {
-                updatedEnemy.health -= 20;
+                updatedEnemy.health -= 50;
+                playHit()
                 return false;
               }
               return true;
@@ -117,6 +147,7 @@ const Game = () => {
             enemy.y > 90
           ) {
             setGameOver(true);
+            playgmmusic()
             return false;
           }
           return true;
@@ -190,7 +221,10 @@ const Game = () => {
           ))}
         </>
       )}
-      <audio id="gunshot" src="/SFX/submachine-gun-79846.mp3"></audio>
+      <audio id="gunshot" src="/SFX/bulletshoot.mp3"></audio>
+      <audio id="bgmusic" src={backgroundMusic}></audio>
+      <audio id="gmmusic" src="/SFX/gameover.mp3"></audio>
+      <audio id="spawnhit" src="/SFX/spawnhit.mp3"></audio>
     </div>
   );
 };
