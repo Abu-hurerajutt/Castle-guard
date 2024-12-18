@@ -5,6 +5,7 @@ const Game = () => {
   const [playerPosition, setPlayerPosition] = useState(50);
   const [balls, setBalls] = useState([]);
   const [enemies, setEnemies] = useState([]);
+  const [boss,setboss] = useState([])
   const [gameOver, setGameOver] = useState(false);
   const [paused, setPaused] = useState(false); // Pause state
   const gameRef = useRef(null);
@@ -42,6 +43,16 @@ const Game = () => {
         stopbgmusic()}
     },[paused,gameOver]
   )
+  //boss with health
+  useEffect(()=>{
+    if (paused|| gameOver) return ;
+    const bossinterval = setInterval(() => {
+      setboss((prev)=>[
+        ...prev,{x:5,y:0,health:100}
+      ])
+    }, 40000);
+    return ()=> clearInterval(bossinterval)
+  },[paused,gameOver])
   // Spawn enemies with health
   useEffect(() => {
     if (paused || gameOver) return;
@@ -74,11 +85,24 @@ const Game = () => {
       setEnemies((prevEnemies) =>
         prevEnemies
           .map((enemy) => ({ ...enemy, y: enemy.y + 2 }))
-          .filter((enemy) => enemy.y < 100)
+          .filter((enemy) => enemy.y < 100 )
       );
     }, 100);
     return () => clearInterval(enemiesInterval);
   }, [paused, gameOver]);
+  //move boss downward
+  useEffect(() => {
+    if (paused || gameOver) return;
+    const Bossinterval = setInterval(() => {
+      setboss((prevboss) =>
+        prevboss
+          .map((boss) => ({ ...boss, y: boss.y + 2 }))
+          .filter((boss) => boss.y < 100)
+      );
+    }, 1000);
+    return () => clearInterval(Bossinterval);
+  }, [paused, gameOver]);
+  
 
   // Handle player movement and shooting
   useEffect(() => {
@@ -94,7 +118,7 @@ const Game = () => {
         playshot()
         setBalls((prevBalls) => [
           ...prevBalls,
-          { x: playerPosition + 2.5, y: 10 },
+          { x: playerPosition + 5.5, y: 21 },
         ]);
       }
     };
@@ -103,6 +127,38 @@ const Game = () => {
     return () => {window.removeEventListener("keydown", handleKeyDown)
     };
   }, [playerPosition, paused, gameOver]);
+  // check for collisions between balls and boss
+  useEffect(()=>{
+    if (paused||gameOver) return;
+    setboss((prevboss) =>
+      prevboss
+        .map((boss) => {
+          let updatedboss = { ...boss };
+          setBalls((prevballs) =>
+            prevballs.filter((ball) => {
+              if (
+                Math.abs(boss.x - ball.x) < 30 &&
+                Math.abs(boss.y - ball.y) < 10
+              ) {
+                updatedboss.health -= 10;
+                playHit()
+                return false;
+              }
+              return true;
+            })
+          );
+          if(updatedboss.health > 0){
+            return updatedboss;
+          } 
+          else{
+            setScore(a=> score+10)
+            return null
+          }
+        })
+        .filter(Boolean)
+    );
+
+  },[balls,paused,gameOver])
 
   // Check for collisions between balls and enemies
   useEffect(() => {
@@ -114,8 +170,8 @@ const Game = () => {
           setBalls((prevBalls) =>
             prevBalls.filter((ball) => {
               if (
-                Math.abs(enemy.x - ball.x) < 10 &&
-                Math.abs(enemy.y - ball.y) < 10
+                Math.abs(enemy.x - ball.x) < 15 &&
+                Math.abs(enemy.y - ball.y) < 5
               ) {
                 updatedEnemy.health -= 50;
                 playHit()
@@ -143,8 +199,8 @@ const Game = () => {
       setEnemies((prevEnemies) =>
         prevEnemies.filter((enemy) => {
           if (
-            Math.abs(enemy.x - playerPosition) < 5 &&
-            enemy.y > 90
+            Math.abs(enemy.x - playerPosition) < 9 &&
+            enemy.y > 89
           ) {
             setGameOver(true);
             playgmmusic()
@@ -167,6 +223,20 @@ const Game = () => {
   const handleResume = () => {
     setPaused(false);
   };
+  //handle clicks on small screens
+  const handleclickshoot = () =>{
+    playshot()
+    setBalls((prevBalls) => [
+      ...prevBalls,
+      { x: playerPosition + 4.5, y: 17 },
+    ]);
+  }
+  const handleclickright = ()=>{
+    setPlayerPosition((prev) => Math.min(prev + 5, 90));
+  }
+  const handleclickleft = ()=>{
+    setPlayerPosition((prev) => Math.max(prev - 5, 0));
+  }
 
   return (
     
@@ -207,6 +277,7 @@ const Game = () => {
               style={{ left: `${ball.x}%`, bottom: `${ball.y}%` }}
             ></div>
           ))}
+          <div className="enemiesarea">
           {enemies.map((enemy, index) => (
             <div
               key={index}
@@ -219,6 +290,25 @@ const Game = () => {
       style={{ width: "50px", height: "10px" }}
     ></progress>            </div>
           ))}
+          {boss.map((boss,index)=>(
+            <div
+            className="boss"
+            key={index}
+            style={{left: `${boss.x}%`, top:`${boss.y}%`}}
+            >
+              <progress
+              value={boss.health}
+              max="100"
+              style={{width:"100px",height:"20px"}}
+              ></progress>
+            </div>
+            
+          ))}
+         <button onClick={handleclickright}>right</button>
+          <button onClick={handleclickleft}>left</button>
+          <button onClick={handleclickshoot}>shot</button>
+          </div>
+          
         </>
       )}
       <audio id="gunshot" src="/SFX/bulletshoot.mp3"></audio>
