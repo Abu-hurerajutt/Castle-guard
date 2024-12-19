@@ -138,7 +138,7 @@ const Game = () => {
             prevballs.filter((ball) => {
               if (
                 Math.abs(boss.x - ball.x) < 30 &&
-                Math.abs(boss.y - ball.y) < 10
+                Math.abs(boss.y - ball.y) < 1
               ) {
                 updatedboss.health -= 10;
                 playHit()

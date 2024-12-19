@@ -43,7 +43,7 @@
   }
   .boss{
     position: absolute;
-    background-image: url("/VFX/enemy.svg");
+    background-image: url("/VFX/boss.svg");
     width: 50%;
     height: 30%;
     top: 0;
