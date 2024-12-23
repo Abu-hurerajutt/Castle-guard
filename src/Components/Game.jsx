@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Game.css";
+import { TfiMenuAlt } from "react-icons/tfi";
+import { FaCaretSquareLeft } from "react-icons/fa";
+import { FaCaretSquareRight } from "react-icons/fa";
+import { GiSupersonicBullet } from "react-icons/gi";
+
+
+
 
 const Game = () => {
   const [playerPosition, setPlayerPosition] = useState(50);
@@ -122,7 +129,7 @@ const Game = () => {
         playshot()
         setBalls((prevBalls) => [
           ...prevBalls,
-          { x: playerPosition + 6, y: 21 },
+          { x: playerPosition + 4.3, y: 21 },
         ]);
       }
     };
@@ -141,7 +148,7 @@ const Game = () => {
           setBalls((prevballs) =>
             prevballs.filter((ball) => {
               if (
-                Math.abs(boss.x - ball.x) < 30 &&
+                Math.abs(boss.x - ball.x) < 20 &&
                 Math.abs(boss.y - ball.y) < 2
               ) {
                 updatedboss.health -= 5;
@@ -174,7 +181,7 @@ const Game = () => {
           setBalls((prevBalls) =>
             prevBalls.filter((ball) => {
               if (
-                Math.abs(enemy.x - ball.x) < 15 &&
+                Math.abs(enemy.x - ball.x) < 10 &&
                 Math.abs(enemy.y - ball.y) < 2
               ) {
                 updatedEnemy.health -= 50;
@@ -270,22 +277,22 @@ useEffect(() => {
         className="menu-button"
         onClick={() => setPaused((prev) => !prev)}
       >
-        Menu
+        <TfiMenuAlt />
       </button>
-      <br />
-      <br />
-      <br />
-      <input type="number" value={score} readOnly/>
+      <div className="scorebox">Score = {score}</div>
 
       {paused && !gameOver && (
         <div className="menu">
           <h2>Game Paused</h2>
           <button onClick={handleRestart}>Restart Game</button>
+          <br />
+          <br />
           <button onClick={handleResume}>Resume Game</button>
         </div>
       )}
 
       {gameOver && <div className="game-over">Game Over
+        <br />
         <button onClick={handleRestart}>Restart</button>
         </div>}
 
@@ -329,9 +336,12 @@ useEffect(() => {
             </div>
             
           ))}
-         <button onClick={handleclickright}>right</button>
-          <button onClick={handleclickleft}>left</button>
-          <button onClick={handleclickshoot}>shot</button>
+         <button onClick={handleclickright}><FaCaretSquareRight />
+         </button>
+          <button onClick={handleclickleft}><FaCaretSquareLeft />
+          </button>
+          <button onClick={handleclickshoot}><GiSupersonicBullet />
+          </button>
           </div>
           
         </>
