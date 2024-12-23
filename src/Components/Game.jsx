@@ -29,6 +29,10 @@ const Game = () => {
     const hitElement = document.getElementById("spawnhit")
     hitElement.play()
   }
+  const playbosshit = ()=>{
+    const bosshitelement= document.getElementById("bosshit")
+    bosshitelement.play()
+  }
   const stopbgmusic = ()=>{
     setbackgroundMusic("")
   }
@@ -48,7 +52,7 @@ const Game = () => {
     if (paused|| gameOver) return ;
     const bossinterval = setInterval(() => {
       setboss((prev)=>[
-        ...prev,{x:5,y:0,health:100}
+        ...prev,{x: Math.random() * 90 + 5,y:0,health:100}
       ])
     }, 40000);
     return ()=> clearInterval(bossinterval)
@@ -59,7 +63,7 @@ const Game = () => {
     const interval = setInterval(() => {
       setEnemies((prev) => [
         ...prev,
-        { x: Math.random() * 90 + 10, y: 0, health: 100 },
+        { x: Math.random() * 90 + 5, y: 0, health: 100 },
       ]);
     }, 2000);
     return () => clearInterval(interval);
@@ -85,7 +89,7 @@ const Game = () => {
       setEnemies((prevEnemies) =>
         prevEnemies
           .map((enemy) => ({ ...enemy, y: enemy.y + 2 }))
-          .filter((enemy) => enemy.y < 100 )
+          .filter((enemy) => enemy.y < 100  )
       );
     }, 100);
     return () => clearInterval(enemiesInterval);
@@ -118,7 +122,7 @@ const Game = () => {
         playshot()
         setBalls((prevBalls) => [
           ...prevBalls,
-          { x: playerPosition + 5.5, y: 21 },
+          { x: playerPosition + 6, y: 21 },
         ]);
       }
     };
@@ -138,10 +142,10 @@ const Game = () => {
             prevballs.filter((ball) => {
               if (
                 Math.abs(boss.x - ball.x) < 30 &&
-                Math.abs(boss.y - ball.y) < 1
+                Math.abs(boss.y - ball.y) < 2
               ) {
-                updatedboss.health -= 10;
-                playHit()
+                updatedboss.health -= 5;
+                playbosshit()
                 return false;
               }
               return true;
@@ -171,7 +175,7 @@ const Game = () => {
             prevBalls.filter((ball) => {
               if (
                 Math.abs(enemy.x - ball.x) < 15 &&
-                Math.abs(enemy.y - ball.y) < 5
+                Math.abs(enemy.y - ball.y) < 2
               ) {
                 updatedEnemy.health -= 50;
                 playHit()
@@ -213,6 +217,27 @@ const Game = () => {
 
     checkPlayerEnemyCollision();
   }, [playerPosition, enemies, paused, gameOver]);
+// check collisions between boss and player
+useEffect(() => {
+  if (paused || gameOver) return;
+  const checkPlayerbossCollision = () => {
+    setboss((prevboss) =>
+      prevboss.filter((boss) => {
+        if (
+          Math.abs(boss.x - playerPosition) < 15 &&
+          boss.y > 89
+        ) {
+          setGameOver(true);
+          playgmmusic()
+          return false;
+        }
+        return true;
+      })
+    );
+  };
+
+  checkPlayerbossCollision();
+}, [playerPosition, enemies, paused, gameOver]);
 
   // Handle restart
   const handleRestart = () => {
@@ -315,6 +340,7 @@ const Game = () => {
       <audio id="bgmusic" src={backgroundMusic}></audio>
       <audio id="gmmusic" src="/SFX/gameover.mp3"></audio>
       <audio id="spawnhit" src="/SFX/spawnhit.mp3"></audio>
+      <audio id="bosshit" src="/SFX/bosshit.mp3"></audio>
     </div>
   );
 };
