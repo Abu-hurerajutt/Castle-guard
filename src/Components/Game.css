@@ -51,7 +51,7 @@
   }
   
   .game-over {
-    color: black;
+    color: white;
     font-weight: bold;
     font-size: 40px;
     text-align: center;
@@ -59,6 +59,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.616);
+    padding: 10px;
   }
   .menu-button {
     position: absolute;

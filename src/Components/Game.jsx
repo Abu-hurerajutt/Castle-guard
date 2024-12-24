@@ -256,16 +256,58 @@ useEffect(() => {
     setPaused(false);
   };
   //handle clicks on small screens
-  const handleclickshoot = () =>{
+  //for nest hub and nest hub max
+  const handleclickshoot1 = () =>{
     playshot()
     setBalls((prevBalls) => [
       ...prevBalls,
-      { x: playerPosition + 4.5, y: 17 },
+      { x: playerPosition + 5.6, y: 21 },
+    ]);
+  }
+  //for ipad pro
+  const handleclickshoot2 = () =>{
+    playshot()
+    setBalls((prevBalls) => [
+      ...prevBalls,
+      { x: playerPosition + 12.6, y: 21 },
+    ]);
+  }
+  //for ipad air
+  const handleclickshoot3 = () =>{
+    playshot()
+    setBalls((prevBalls) => [
+      ...prevBalls,
+      { x: playerPosition + 14.2, y: 21 },
+    ]);
+  }
+  // for ipad mini and surface pro 7
+  const handleclickshoot4 = () =>{
+    playshot()
+    setBalls((prevBalls) => [
+      ...prevBalls,
+      { x: playerPosition + 12.4, y: 21 },
+    ]);
+  }
+  // for surface duo 7
+  const handleclickshoot5 = () =>{
+    playshot()
+    setBalls((prevBalls) => [
+      ...prevBalls,
+      { x: playerPosition + 12, y: 21 },
+    ]);
+  }
+  // for iphone 14 pro max , iphone xr , samsung galaxy a51/71 , iphone 12 promax , iphone se , pixel 7, samsung galazy 8+,samsung s20 ultra,samsung s20 ultra,galaxy zfold
+  const handleclickshoot6 = () =>{
+    playshot()
+    setBalls((prevBalls) => [
+      ...prevBalls,
+      { x: playerPosition + 15, y: 21 },
     ]);
   }
   const handleclickright = ()=>{
     setPlayerPosition((prev) => Math.min(prev + 5, 90));
   }
+  
   const handleclickleft = ()=>{
     setPlayerPosition((prev) => Math.max(prev - 5, 0));
   }
@@ -340,7 +382,24 @@ useEffect(() => {
          </button>
           <button onClick={handleclickleft}><FaCaretSquareLeft />
           </button>
-          <button onClick={handleclickshoot}><GiSupersonicBullet />
+          {/* for nest hub and nest hub max */}
+          {/* <button onClick={handleclickshoot1}><GiSupersonicBullet />
+          </button> */}
+          {/* for ipad pro */}
+          {/* <button onClick={handleclickshoot2}><GiSupersonicBullet />
+          </button> */}
+          {/* for ipad air */}
+          {/* <button onClick={handleclickshoot3}><GiSupersonicBullet />
+          </button> */}
+          {/* for ipad mini */}
+          {/* <button onClick={handleclickshoot4}><GiSupersonicBullet />
+          </button> */}
+          {/* for asus zenfold */}
+          {/* <button onClick={handleclickshoot5}><GiSupersonicBullet />
+          </button> */}
+          {/* for iphone 14 pro max , iphone xr , samsung galaxy a51/71 , iphone 12 promax , iphone se , pixel 7, samsung galazy 8+
+          ,galaxy zfold*/}
+          <button onClick={handleclickshoot6}><GiSupersonicBullet />
           </button>
           </div>
           
