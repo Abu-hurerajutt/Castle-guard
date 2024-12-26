@@ -43,6 +43,10 @@ const Game = () => {
   const stopbgmusic = ()=>{
     setbackgroundMusic("")
   }
+  const deadsound = ()=>{
+    const deadelement = document.getElementById("dead")
+    deadelement.play()
+  }
   useEffect(
     ()=>{
       if(paused||gameOver) return;
@@ -61,7 +65,7 @@ const Game = () => {
       setboss((prev)=>[
         ...prev,{x: Math.random() * 90 + 5,y:0,health:100}
       ])
-    }, 40000);
+    }, 20000);
     return ()=> clearInterval(bossinterval)
   },[paused,gameOver])
   // Spawn enemies with health
@@ -97,6 +101,7 @@ const Game = () => {
         prevEnemies
           .map((enemy) => ({ ...enemy, y: enemy.y + 2 }))
           .filter((enemy) => enemy.y < 100  )
+          .filter((enemy) => enemy.x < 90)
       );
     }, 100);
     return () => clearInterval(enemiesInterval);
@@ -109,6 +114,7 @@ const Game = () => {
         prevboss
           .map((boss) => ({ ...boss, y: boss.y + 2 }))
           .filter((boss) => boss.y < 100)
+          .filter((boss) => boss.x < 90)
       );
     }, 1000);
     return () => clearInterval(Bossinterval);
@@ -149,7 +155,7 @@ const Game = () => {
             prevballs.filter((ball) => {
               if (
                 Math.abs(boss.x - ball.x) < 20 &&
-                Math.abs(boss.y - ball.y) < 2
+                Math.abs(boss.y - ball.y) < 1
               ) {
                 updatedboss.health -= 5;
                 playbosshit()
@@ -215,6 +221,7 @@ const Game = () => {
           ) {
             setGameOver(true);
             playgmmusic()
+            deadsound()
             return false;
           }
           return true;
@@ -236,6 +243,7 @@ useEffect(() => {
         ) {
           setGameOver(true);
           playgmmusic()
+          deadsound()
           return false;
         }
         return true;
@@ -293,7 +301,7 @@ useEffect(() => {
     playshot()
     setBalls((prevBalls) => [
       ...prevBalls,
-      { x: playerPosition + 12, y: 21 },
+      { x: playerPosition + 14, y: 21 },
     ]);
   }
   // for iphone 14 pro max , iphone xr , samsung galaxy a51/71 , iphone 12 promax , iphone se , pixel 7, samsung galazy 8+,samsung s20 ultra,samsung s20 ultra,galaxy zfold
@@ -361,7 +369,7 @@ useEffect(() => {
 <progress
       value={enemy.health}
       max="100"
-      style={{ width: "50px", height: "10px" }}
+      className="spawn-healthbar"
     ></progress>            </div>
           ))}
           {boss.map((boss,index)=>(
@@ -372,34 +380,34 @@ useEffect(() => {
             >
               <progress
               value={boss.health}
+              className="boss-hp"
               max="100"
-              style={{width:"100px",height:"20px"}}
               ></progress>
             </div>
             
           ))}
-         <button onClick={handleclickright}><FaCaretSquareRight />
+         <button className=" controlbtn rightbtn" onClick={handleclickright}><FaCaretSquareRight />
          </button>
-          <button onClick={handleclickleft}><FaCaretSquareLeft />
+          <button className="controlbtn leftbtn" onClick={handleclickleft}><FaCaretSquareLeft />
           </button>
           {/* for nest hub and nest hub max */}
-          {/* <button onClick={handleclickshoot1}><GiSupersonicBullet />
-          </button> */}
+          <button className="controlbtn shotbtn shot1" onClick={handleclickshoot1}><GiSupersonicBullet />
+          </button>
           {/* for ipad pro */}
-          {/* <button onClick={handleclickshoot2}><GiSupersonicBullet />
-          </button> */}
+          <button className="controlbtn shotbtn shot2" onClick={handleclickshoot2}><GiSupersonicBullet />
+          </button>
           {/* for ipad air */}
-          {/* <button onClick={handleclickshoot3}><GiSupersonicBullet />
-          </button> */}
+          <button className="controlbtn shotbtn shot3" onClick={handleclickshoot3}><GiSupersonicBullet />
+          </button>
           {/* for ipad mini */}
-          {/* <button onClick={handleclickshoot4}><GiSupersonicBullet />
-          </button> */}
+          <button className="controlbtn shotbtn shot4" onClick={handleclickshoot4}><GiSupersonicBullet />
+          </button>
           {/* for asus zenfold */}
-          {/* <button onClick={handleclickshoot5}><GiSupersonicBullet />
-          </button> */}
+          <button className="controlbtn shotbtn shot5" onClick={handleclickshoot5}><GiSupersonicBullet />
+          </button>
           {/* for iphone 14 pro max , iphone xr , samsung galaxy a51/71 , iphone 12 promax , iphone se , pixel 7, samsung galazy 8+
           ,galaxy zfold*/}
-          <button onClick={handleclickshoot6}><GiSupersonicBullet />
+          <button className="controlbtn shotbtn shot6" onClick={handleclickshoot6}><GiSupersonicBullet />
           </button>
           </div>
           
@@ -410,6 +418,7 @@ useEffect(() => {
       <audio id="gmmusic" src="/SFX/gameover.mp3"></audio>
       <audio id="spawnhit" src="/SFX/spawnhit.mp3"></audio>
       <audio id="bosshit" src="/SFX/bosshit.mp3"></audio>
+      <audio id="dead" src="/SFX/playerkilled.mp3"></audio>
     </div>
   );
 };

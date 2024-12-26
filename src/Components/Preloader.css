@@ -1,0 +1,24 @@
+.preloader{
+height: 100vh;
+width: 100%;
+background-color: black;
+padding-top: 20vh;
+}
+h1{
+    color: red;
+}
+.logo{
+    background-image: url("/VFX/logo.svg");
+    width: 40vw;
+    height: 20vh ;
+    background-repeat: no-repeat;
+    margin: auto;
+}
+p{
+    color: white;
+}
+@media screen and (max-width:1300px) {
+    .key-ctrl{
+        display: none;
+    }
+}

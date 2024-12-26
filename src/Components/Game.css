@@ -44,8 +44,8 @@
   .boss{
     position: absolute;
     background-image: url("/VFX/boss.svg");
-    width: 50%;
-    height: 30%;
+    width: 60%;
+    height: 40%;
     top: 0;
     background-repeat: no-repeat;
   }
@@ -105,4 +105,176 @@
     padding: 5px 30px 5px 5px;
     font-size: clamp(12px,2vw,20px);
   }
+  progress {
+    width: 50%; /* 50% of the parent container's width */
+    height: 5%; /* Fixed height for better control */
+    border: none; /* Removes default border if present */
+    border-radius: 10px; /* Rounds the entire progress bar */
+    overflow: hidden; /* Ensures the rounded corners are applied */
+}
+
+progress::-webkit-progress-bar {
+    background-color: red; /* Background color for unfilled part */
+     
+}
+
+progress::-webkit-progress-value {
+    background-color: yellow; /* Filled part color */
+   
+}
+
+/* Firefox-specific styles */
+progress::-moz-progress-bar {
+    background-color: yellow; /* Filled part color for Firefox */
+}
+.shot1{
+  display: none;
+}
+.shot2{
+  display: none;
+}
+.shot3{
+  display: none;
+}
+.shot4{
+  display: none;
+}
+.shot5{
+  display: none;
+}
+.shot6{
+  display: none;
+}
+.rightbtn{
+  display: none;
+  right: 3%;
+  bottom: 3%;
+}
+.controlbtn{
+  background-color: rgba(220, 220, 220, 0);
+  font-size: clamp(50px,5vw,20px);
+  border: none;
+  color:rgb(97, 1, 1) ;
+  position: absolute;
+}
+.controlbtn:hover{
+  background-color: rgba(240, 248, 255, 0);
+  color: rgb(156, 2, 2) ;
+}
+.leftbtn{
+  display: none;
+  left: 3%;
+  bottom: 3%;
+}
+.shotbtn{
+  bottom: 20%;
+  right: 3% ;
+  position: absolute;
+}
+@media screen and (max-width:1300px) {
+  .rightbtn{
+    display: block;
+  }
+  .leftbtn{
+    display: block;
+  }
+}
+
+@media screen and (max-width:520px){
+  .enemy{
+    height: 30%;
+    width: 30%;
+  }
+}
+
+
+/* for nesthub max */
+@media (max-width: 1280px) and (max-height:800px) {
+  .shot1{
+    display: block;
+  }
+}
+/* for nesthub  */
+@media (max-width: 1024px) and (max-height:600px) {
+  .shot1{
+    display: block;
+  }
+}
+/* for ipad pro */
+/* debugged media overlapping with nesthub */
+@media (max-width: 1024px) and (min-height:1355px) and (max-height:1366px){
+  .shot1{
+    display: none;
+  }
+  .shot2{
+    display: block;
+  }
+}
+/* for ipad air */
+@media (max-width:820px) and (max-height:1180px){
+  .shot2{
+    display: none;
+  }
+}
+/* for ipad mini */
+@media (max-width:768px) and (max-height:1024px){
+  .shot3{
+    display: none;
+  }
+  .shot5{
+    opacity: 0;
+    color: rgba(240, 248, 255, 0);
+    bottom: 100%;
+  }
+  .shot5:hover{
+    opacity: 0;
+    color: rgba(240, 248, 255, 0);
+  }
+  .shot4{
+    display: block;
+    
+  }
+}
+/* for asus zenfold */
+/* debugged mediaquery overlapping bug */
+@media (min-width:850px) and (max-width:853px)and(max-height:1280px) {
+  .shot4{
+    display: none;
+    background-color: blue;
+  }
+  .shot2{
+    display: none;
+  }
+  .shot5{
+    display: block;
+  }
+}
+/* for surface pro 7 */
+@media (max-width:912px) and (max-height:1368px){
+  .shot5{
+    display: block;
+  }
+  .shot1{
+    display: none;
+  }
+}
+/* for surface duo */
+@media (max-width:540px) and (max-height:720px){
+  .shot5{
+    display: none;
+  }
+  .shot4{
+    display: block;
+  }
+}
+/* for mobiles */
+@media (max-width:430px) and (max-height:932px){
+  .shot6{
+    display: block;
+  }
+  .shot4{
+    display: none;
+  }
+}
+
   
