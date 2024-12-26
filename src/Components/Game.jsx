@@ -65,7 +65,7 @@ const Game = () => {
       setboss((prev)=>[
         ...prev,{x: Math.random() * 90 + 5,y:0,health:100}
       ])
-    }, 20000);
+    }, 40000);
     return ()=> clearInterval(bossinterval)
   },[paused,gameOver])
   // Spawn enemies with health
@@ -103,7 +103,7 @@ const Game = () => {
           .filter((enemy) => enemy.y < 100  )
           .filter((enemy) => enemy.x < 90)
       );
-    }, 100);
+    }, 300);
     return () => clearInterval(enemiesInterval);
   }, [paused, gameOver]);
   //move boss downward
