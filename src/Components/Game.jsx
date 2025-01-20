@@ -14,6 +14,8 @@ const Game = () => {
   const [enemies, setEnemies] = useState([]);
   const [boss,setboss] = useState([])
   const [gameOver, setGameOver] = useState(false);
+  const [dragStart, setDragStart] = useState(null);
+  const [dragOffset, setDragOffset] = useState(0);
   const [paused, setPaused] = useState(false); // Pause state
   const gameRef = useRef(null);
  const [score,setScore] = useState(0)
@@ -103,7 +105,7 @@ const Game = () => {
           .filter((enemy) => enemy.y < 100  )
           .filter((enemy) => enemy.x < 90)
       );
-    }, 300);
+    }, 100);
     return () => clearInterval(enemiesInterval);
   }, [paused, gameOver]);
   //move boss downward
@@ -312,13 +314,31 @@ useEffect(() => {
       { x: playerPosition + 15, y: 21 },
     ]);
   }
-  const handleclickright = ()=>{
-    setPlayerPosition((prev) => Math.min(prev + 5, 90));
-  }
-  
-  const handleclickleft = ()=>{
-    setPlayerPosition((prev) => Math.max(prev - 5, 0));
-  }
+  //analog stick for player navigation on small screens
+  const handleDragStart = (e) => {
+    const start = e.touches ? e.touches[0].clientX : e.clientX;
+    setDragStart(start);
+  };
+
+  const handleDragMove = (e) => {
+    if (dragStart === null) return;
+
+    const current = e.touches ? e.touches[0].clientX : e.clientX;
+    const offset = current - dragStart;
+    setDragOffset(offset);
+
+    // Adjust player position based on drag offset
+    setPlayerPosition((prev) =>
+      Math.max(0, Math.min(90, prev + offset / 10)) // Adjust sensitivity with division factor
+    );
+
+    setDragStart(current); // Update drag start for smooth movement
+  };
+
+  const handleDragEnd = () => {
+    setDragStart(null);
+    setDragOffset(0);
+  };
 
   return (
     
@@ -386,10 +406,11 @@ useEffect(() => {
             </div>
             
           ))}
-         <button className=" controlbtn rightbtn" onClick={handleclickright}><FaCaretSquareRight />
+          <span className="largscrn-inst">use left and right key for navigating player and spacebar for shooting</span>
+         {/* <button className=" controlbtn rightbtn" onClick={handleclickright}><FaCaretSquareRight />
          </button>
           <button className="controlbtn leftbtn" onClick={handleclickleft}><FaCaretSquareLeft />
-          </button>
+          </button> */}
           {/* for nest hub and nest hub max */}
           <button className="controlbtn shotbtn shot1" onClick={handleclickshoot1}><GiSupersonicBullet />
           </button>
@@ -409,6 +430,18 @@ useEffect(() => {
           ,galaxy zfold*/}
           <button className="controlbtn shotbtn shot6" onClick={handleclickshoot6}><GiSupersonicBullet />
           </button>
+          {/* analog stick for small screens */}
+          <div
+        className="analog-stick"
+        onMouseDown={handleDragStart}
+        onMouseMove={handleDragMove}
+        onMouseUp={handleDragEnd}
+        onTouchStart={handleDragStart}
+        onTouchMove={handleDragMove}
+        onTouchEnd={handleDragEnd}
+      >
+        <div className="controlbtn stick-center" style={{ transform: `translateX(${dragOffset}px)` }}></div>
+      </div>
           </div>
           
         </>

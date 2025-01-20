@@ -4,7 +4,9 @@ import "./Preloader.css"
 const Preloader = () => {
   return (
     <div className='preloader'>
-      <div className='logo'></div>
+      <br />
+      <center><div className='logo'></div></center>
+      <br />
       <center><h1>Underworld Wars</h1>
       <p className='key-ctrl'>Use right and left keys to navigate player</p>
       <p className='key-ctrl'>and Use spacebar to shot enemies </p>
